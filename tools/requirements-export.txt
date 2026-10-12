@@ -1,0 +1,10 @@
+# Only needed to regenerate models/*.onnx from the .pth checkpoints.
+# Install the CPU build of PyTorch first:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+torch
+segmentation-models-pytorch
+transformers
+safetensors
+onnx
+onnxscript
+onnxruntime

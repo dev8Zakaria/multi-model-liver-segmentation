@@ -1,0 +1,51 @@
+{
+  "classes": [
+    {"id": 0, "key": "background", "label": "Fond", "color": null},
+    {"id": 1, "key": "portal_vein", "label": "Veine porte", "color": "#0A84FF"},
+    {"id": 2, "key": "central_vein", "label": "Veine centrale", "color": "#30D158"},
+    {"id": 3, "key": "artery", "label": "Artère hépatique", "color": "#FF453A"},
+    {"id": 4, "key": "bile_duct", "label": "Canal biliaire", "color": "#BF5AF2"}
+  ],
+  "models": [
+    {
+      "id": "segformer_b0",
+      "file": "segformer_b0.onnx",
+      "name": "SegFormer",
+      "detail": "Encodeur MiT-B0 · augmentation",
+      "run": "Run 7",
+      "dice": {"overall": 0.720, "portal_vein": 0.794, "central_vein": 0.773, "artery": 0.720, "bile_duct": 0.592}
+    },
+    {
+      "id": "unetpp_aug",
+      "file": "unetpp_aug.onnx",
+      "name": "U-Net++",
+      "detail": "Encodeur ResNet34 · augmentation",
+      "run": "Run 2",
+      "dice": {"overall": 0.720, "portal_vein": 0.769, "central_vein": 0.776, "artery": 0.707, "bile_duct": 0.627}
+    },
+    {
+      "id": "deeplabv3plus",
+      "file": "deeplabv3plus.onnx",
+      "name": "DeepLabV3+",
+      "detail": "Encodeur ResNet34 · augmentation",
+      "run": "Run 4",
+      "dice": {"overall": 0.719, "portal_vein": 0.773, "central_vein": 0.781, "artery": 0.701, "bile_duct": 0.621}
+    },
+    {
+      "id": "unetpp_noaug",
+      "file": "unetpp_noaug.onnx",
+      "name": "U-Net++",
+      "detail": "Encodeur ResNet34 · sans augmentation",
+      "run": "Run 1",
+      "dice": {"overall": 0.705, "portal_vein": 0.730, "central_vein": 0.776, "artery": 0.700, "bile_duct": 0.615}
+    },
+    {
+      "id": "attention_unet",
+      "file": "attention_unet.onnx",
+      "name": "Attention U-Net",
+      "detail": "Sans pré-entraînement · augmentation",
+      "run": "Run 3",
+      "dice": {"overall": 0.663, "portal_vein": 0.650, "central_vein": 0.736, "artery": 0.670, "bile_duct": 0.595}
+    }
+  ]
+}

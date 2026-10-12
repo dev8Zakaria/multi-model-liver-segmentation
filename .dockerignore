@@ -1,0 +1,7 @@
+.git
+.claude
+.venv
+tools
+**/__pycache__
+NoteBooks
+Runs & Weights

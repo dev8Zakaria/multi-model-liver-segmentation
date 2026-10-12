@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Segmentation vasculaire hépatique</title>
+  <meta name="description" content="Prototype académique : segmentation automatique des structures vasculaires du parenchyme hépatique.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="toolbar">
+    <div class="toolbar-inner">
+      <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9.25" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="9" cy="10" r="2.6" fill="currentColor"/>
+          <circle cx="15.2" cy="14.6" r="1.7" fill="currentColor" opacity=".55"/>
+        </svg>
+        <span class="brand-name">Parenchyme hépatique</span>
+        <span class="brand-sub">Segmentation vasculaire</span>
+      </div>
+      <span class="chip">Prototype académique</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="stage" aria-label="Image">
+      <div class="dropzone" id="dropzone">
+        <h1 class="display">Analyser une coupe de foie</h1>
+        <p class="lede">Déposez une image histologique pour localiser les veines portes, les veines centrales, les artères hépatiques et les canaux biliaires.</p>
+        <button class="button primary" id="pick" type="button">Choisir une image</button>
+        <p class="hint">ou glissez-la ici · TIFF, PNG, JPEG</p>
+        <input id="file" type="file" accept=".tif,.tiff,.png,.jpg,.jpeg,.webp,.bmp,image/*" hidden>
+        <div class="samples" id="samples" hidden>
+          <p class="samples-title">Essayer avec un exemple</p>
+          <div class="samples-row" id="samples-row"></div>
+        </div>
+      </div>
+
+      <div class="viewer" id="viewer" hidden>
+        <div class="viewer-bar">
+          <span class="filename" id="filename"></span>
+          <button class="button quiet" id="replace" type="button">Changer d’image</button>
+        </div>
+        <div class="frame-wrap">
+          <div class="frame" id="frame">
+            <img id="base" alt="Image analysée" draggable="false">
+            <canvas id="overlay" aria-label="Masque de segmentation"></canvas>
+            <span class="tag tag-left" id="tag-left">Original</span>
+            <span class="tag tag-right" id="tag-right">Segmentation</span>
+            <div class="divider" id="divider" role="slider" tabindex="0"
+                 aria-label="Comparer l’original et la segmentation"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+              <span class="divider-grip" aria-hidden="true"></span>
+            </div>
+            <div class="status" id="status" role="status" hidden></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel" aria-label="Réglages et résultats">
+      <section class="group">
+        <h2 class="group-title">Modèle</h2>
+        <div class="models" id="models" role="radiogroup" aria-label="Modèle"></div>
+        <p class="footnote">Dice moyen des quatre structures, mesuré sur l’ensemble de validation.</p>
+      </section>
+
+      <section class="group">
+        <h2 class="group-title">Découpage</h2>
+        <div class="segmented" id="modes" role="radiogroup" aria-label="Découpage">
+          <label><input type="radio" name="mode" value="auto" checked><span>Auto</span></label>
+          <label><input type="radio" name="mode" value="whole"><span>Image entière</span></label>
+          <label><input type="radio" name="mode" value="tiles"><span>Tuiles</span></label>
+        </div>
+        <p class="footnote" id="mode-help"></p>
+      </section>
+
+      <section class="group" id="results" hidden>
+        <h2 class="group-title">Structures détectées</h2>
+        <ul class="legend" id="legend"></ul>
+        <label class="slider-row">
+          <span>Opacité du masque</span>
+          <input id="opacity" type="range" min="0" max="100" value="65">
+        </label>
+        <p class="footnote" id="meta"></p>
+        <div class="actions">
+          <button class="button" id="dl-mask" type="button">Enregistrer le masque</button>
+          <button class="button" id="dl-overlay" type="button">Enregistrer la superposition</button>
+        </div>
+      </section>
+
+      <p class="disclaimer">Outil de recherche, non validé cliniquement. Les résultats ne constituent pas un diagnostic.</p>
+    </aside>
+  </main>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>

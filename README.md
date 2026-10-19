@@ -1,13 +1,3 @@
----
-title: Segmentation vasculaire hépatique
-emoji: 🔬
-colorFrom: blue
-colorTo: indigo
-sdk: docker
-app_port: 7860
-pinned: false
----
-
 # Segmentation vasculaire du parenchyme hépatique
 
 Application web du PFA « Système intelligent pour la caractérisation automatique du parenchyme hépatique » (ENSA Tanger, FMPT). L'utilisateur dépose une image histologique, choisit l'un des cinq modèles entraînés et obtient le masque des veines portes, veines centrales, artères hépatiques et canaux biliaires.
@@ -29,7 +19,7 @@ Navigateur (HTML/CSS/JS)  ──POST /api/predict──▶  FastAPI  ──▶  
 - `tools/export_onnx.py` : conversion `.pth` → ONNX, avec vérification contre PyTorch.
 - `tools/evaluate_test_set.py` : Dice par classe du pipeline déployé sur le jeu de test.
 
-Les modèles tournent avec ONNX Runtime plutôt que PyTorch : l'image Docker est bien plus légère et l'inférence sur CPU plus rapide, ce qui permet un hébergement gratuit.
+Les modèles tournent avec ONNX Runtime plutôt que PyTorch : l'image Docker est bien plus légère et l'inférence sur CPU plus rapide.
 
 ## Lancer en local
 
@@ -56,21 +46,15 @@ Nécessite PyTorch (`pip install -r tools/requirements-export.txt`) et les check
 python tools/export_onnx.py --downloads C:/Users/zakar/Downloads
 ```
 
-## Déployer gratuitement sur Hugging Face Spaces
+## Déployer sur Render
 
-1. Créer un compte sur huggingface.co, puis un Space de type **Docker** (matériel « CPU basic », gratuit).
-2. Pousser ce dossier dans le dépôt du Space (les fichiers `.onnx` passent par Git LFS, déjà configuré dans `.gitattributes`) :
+L'application est déployée comme service web Docker sur Render, à partir de ce dépôt GitHub (configuration dans `render.yaml`).
 
-```bash
-git init
-git lfs install
-git add .
-git commit -m "Application de segmentation vasculaire"
-git remote add space https://huggingface.co/spaces/<utilisateur>/<nom-du-space>
-git push space main
-```
+1. Sur render.com : **New > Blueprint**, choisir ce dépôt. Render crée le service `liver-vessel-segmentation` (instance Standard) et construit l'image à partir du `Dockerfile`.
+2. Pendant la construction, `deploy/fetch_models.py` télécharge les modèles ONNX depuis GitHub si Render a cloné le dépôt sans Git LFS (vérification par somme SHA-256).
+3. Une fois le service en ligne, l'application est disponible à l'adresse `https://<service>.onrender.com`.
 
-Le Space construit l'image à partir du `Dockerfile` et expose l'application sur une URL publique. Un Space gratuit se met en veille après une période d'inactivité et redémarre à la première visite.
+Une instance payante est facturée tant qu'elle tourne. Entre deux démonstrations, la **suspendre** (Settings > Suspend Web Service) : un service suspendu n'est pas facturé. La reprendre quelques minutes avant la présentation.
 
 ## API
 

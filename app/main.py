@@ -3,7 +3,6 @@ import base64
 import os
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 
 from . import inference
@@ -50,13 +49,6 @@ def list_models():
         for m in inference.REGISTRY["models"]
     ]
     return {"classes": inference.CLASSES, "models": models}
-
-
-@app.post("/api/preview")
-def preview(file: UploadFile = File(...)):
-    """Browser-displayable JPEG of an upload (browsers cannot render TIFF)."""
-    rgb = _read_image(file)
-    return Response(inference.encode_preview(rgb), media_type="image/jpeg")
 
 
 @app.post("/api/predict")

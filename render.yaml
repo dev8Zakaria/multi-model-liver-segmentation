@@ -1,0 +1,9 @@
+# Render Blueprint: Dashboard > New > Blueprint, then pick this repository.
+services:
+  - type: web
+    name: liver-vessel-segmentation
+    runtime: docker
+    plan: standard
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: false
